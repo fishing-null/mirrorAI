@@ -19,4 +19,10 @@ public class AiController {
 
         return completion.chatWithPrompt(message);
     }
+
+    @GetMapping("/chatWithLanguage")
+    public String chatWithLanguage(@RequestParam(value = "message",defaultValue = "Hi")String message,
+                                   @RequestParam(value = "language",defaultValue = "中文") String language){
+        return completion.chatWithRoles(language,message);
+    }
 }
