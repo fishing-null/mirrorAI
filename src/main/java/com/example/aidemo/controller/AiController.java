@@ -1,7 +1,6 @@
 package com.example.aidemo.controller;
 
 import com.example.aidemo.service.Completion;
-import org.springframework.ai.prompt.messages.SystemMessage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +17,6 @@ public class AiController {
     @GetMapping("/chat")
     public String chat(@RequestParam(value = "message",defaultValue = "Hi") String message){
 
-        return completion.chat(message);
+        return completion.chatWithPrompt(message);
     }
 }
