@@ -1,6 +1,7 @@
 package com.example.aidemo.service;
 
 
+import com.example.aidemo.model.Template;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -21,7 +22,8 @@ import java.util.Map;
 public class Completion {
     @Autowired
     private OpenAiChatModel chatModel;
-
+    @Autowired
+    private Template template;
     //为ai指定一个角色
     private final static String SYSTEM_TEXT = "请你以"+"{language}"+"回答我的问题";
     SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(SYSTEM_TEXT);
@@ -29,12 +31,16 @@ public class Completion {
     private final static String PROMPT = "请告诉我关于歌手{name}的信息";
     PromptTemplate promptTemplate = new PromptTemplate(PROMPT);
     //记录上下文存储消息的最大数量
-    private final static Integer MAX_MESSAGE_SIZE = 10;
+    private final static Integer MAX_MESSAGE_SIZE = 20;
     //这个类记录了所有的对话记录
 
-    private String completion;
     private List<Message> messages = new ArrayList<Message>();
 
+    @Autowired
+    public Completion(Template template) {
+        this.systemPromptTemplate = template.getSystemPromptTemplate();
+        this.promptTemplate = template.getPromptTemplate();
+    }
 
     //通过这个方法向对话中增加一条用户消息
     private Completion addUserMessage(String message){
@@ -53,7 +59,9 @@ public class Completion {
     //通过这个方法指定模板进行对话
     public String chatWithPrompt(String message){
         Prompt prompt = promptTemplate.create(Map.of("name",message));
-        return chatModel.call(prompt).getResult().toString();
+        //记录返回的结果
+        String result = chatModel.call(prompt.getContents().toString());
+        return result;
     }
     //通过这个方法进行一次有角色的对话
     public String chatWithRoles(String argument,String message){
@@ -62,30 +70,26 @@ public class Completion {
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(SYSTEM_TEXT);
         Message systemMessage = systemPromptTemplate.createMessage(Map.of("language",argument));
         Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
-        List<Generation> response = chatModel.call(prompt).getResults();
-        return response.toString();
+        String result = chatModel.call(prompt.getContents().toString());
+        return result;
     }
 
-//    //通过这个方法进行一次有上下文的对话
-//    public String chat(String message){
-//        addUserMessage(message);
-//        //记录前几次的对话内容
-//        String result = aiClient.generate(new Prompt(messages).getContents().toString());
-//        //添加本次的对话内容
-//        addAssistantMessage(result);
-//        //更新对话长度
-//        update();
-//        return result;
-//    }
+    //通过这个方法进行一次有上下文的对话
+    public String chat(String message){
+        addUserMessage(message);
+        //记录前几次的对话内容
+        String result = chatModel.call(new Prompt(messages).getContents().toString());
+        //添加本次的对话内容
+        addAssistantMessage(result);
+        //更新对话长度
+        update();
+        return result;
+    }
 
-
-
-//    //更新对话长度
-//    private void update() {
-//
-//        if(messages.size() > MAX_MESSAGE_SIZE){
-//            messages = messages.subList(messages.size() - MAX_MESSAGE_SIZE, messages.size() );
-//            messages.add(0,systemMessage);
-//        }
-//    }
+    //更新对话长度
+    private void update() {
+        if(messages.size() > MAX_MESSAGE_SIZE){
+            messages = messages.subList(messages.size() - MAX_MESSAGE_SIZE, messages.size() );
+        }
+    }
 }
