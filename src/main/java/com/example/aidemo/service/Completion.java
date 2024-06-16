@@ -1,4 +1,4 @@
-package com.example.aidemo;
+package com.example.aidemo.service;
 
 import org.springframework.ai.client.AiClient;
 import org.springframework.ai.prompt.Prompt;
@@ -6,16 +6,16 @@ import org.springframework.ai.prompt.messages.AssistantMessage;
 import org.springframework.ai.prompt.messages.Message;
 import org.springframework.ai.prompt.messages.UserMessage;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class Completion {
     //这个类记录了所有的对话记录
     private final AiClient aiClient;
     private final static Integer MAX_MESSAGE_SIZE = 10;
     private String completion;
     private List<Message> messages = new ArrayList<Message>();
-
     public Completion(AiClient aiClient){
         this.aiClient = aiClient;
     }
