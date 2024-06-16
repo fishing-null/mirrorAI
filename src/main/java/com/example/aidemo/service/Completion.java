@@ -20,9 +20,8 @@ import java.util.Map;
 @Service
 
 public class Completion {
-    @Autowired
     private OpenAiChatModel chatModel;
-    @Autowired
+
     private Template template;
     //为ai指定一个角色
     SystemPromptTemplate systemPromptTemplate = null;
@@ -36,7 +35,8 @@ public class Completion {
     private List<Message> messages = new ArrayList<Message>();
 
     @Autowired
-    public Completion(Template template) {
+    public Completion(Template template,OpenAiChatModel chatModel) {
+        this.chatModel = chatModel;
         this.systemPromptTemplate = template.getSystemPromptTemplate();
         this.promptTemplate = template.getPromptTemplate();
     }
@@ -56,8 +56,10 @@ public class Completion {
     }
 
     //通过这个方法指定模板进行对话
-    public String chatWithPrompt(String message){
-        Prompt prompt = promptTemplate.create(Map.of("name",message));
+    public String chatWithPrompt(String message,String argument){
+        UserMessage userMessage = new UserMessage(message);
+        Message promptMessage = promptTemplate.createMessage(Map.of("name",argument));
+        Prompt prompt = new Prompt(List.of(promptMessage,userMessage));
         //记录返回的结果
         String result = chatModel.call(prompt.getContents().toString());
         return result;

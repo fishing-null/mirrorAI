@@ -20,9 +20,10 @@ public class AiController {
         return completion.chat(message);
     }
     @GetMapping("/chatWithPrompt")
-    public String chatWithPrompt(@RequestParam(value = "message",defaultValue = "Hi") String message){
+    public String chatWithPrompt(@RequestParam(value = "message",defaultValue = "Hi") String message,
+                                 @RequestParam(value = "name",defaultValue = "Hi") String name){
 
-        return completion.chatWithPrompt(message);
+        return completion.chatWithPrompt(message,name);
     }
     @GetMapping("/chatWithLanguage")
     public String chatWithLanguage(@RequestParam(value = "message",defaultValue = "Hi")String message,
