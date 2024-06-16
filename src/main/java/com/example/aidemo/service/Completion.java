@@ -25,11 +25,10 @@ public class Completion {
     @Autowired
     private Template template;
     //为ai指定一个角色
-    private final static String SYSTEM_TEXT = "请你以"+"{language}"+"回答我的问题";
-    SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(SYSTEM_TEXT);
-    //为ai指定提示词
-    private final static String PROMPT = "请告诉我关于歌手{name}的信息";
-    PromptTemplate promptTemplate = new PromptTemplate(PROMPT);
+    SystemPromptTemplate systemPromptTemplate = null;
+
+    //为ai创建一个模板
+    PromptTemplate promptTemplate = null;
     //记录上下文存储消息的最大数量
     private final static Integer MAX_MESSAGE_SIZE = 20;
     //这个类记录了所有的对话记录
@@ -67,9 +66,8 @@ public class Completion {
     public String chatWithRoles(String argument,String message){
         UserMessage userMessage = new UserMessage(message);
         //指定角色模板
-        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(SYSTEM_TEXT);
         Message systemMessage = systemPromptTemplate.createMessage(Map.of("language",argument));
-        Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
+        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
         String result = chatModel.call(prompt.getContents().toString());
         return result;
     }
