@@ -93,6 +93,8 @@ public class Completion {
         if(promptTemplateConfig == null){
             systemPromptTemplate = new SystemPromptTemplate(systemTemplateConfig.getSystemText());
             return;
+        }else if(systemTemplateConfig == null){
+            promptTemplate = new PromptTemplate(promptTemplateConfig.getPromptText());
         }else {
             //全都设置
             systemPromptTemplate = new SystemPromptTemplate(systemTemplateConfig.getSystemText());
