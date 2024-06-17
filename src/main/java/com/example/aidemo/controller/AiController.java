@@ -27,6 +27,7 @@ public class AiController {
     @GetMapping("/chatWithRole")
     public String chatWithRole(@RequestParam(value = "message", defaultValue = "Hi") String message,
                                @RequestBody SystemTemplateConfig systemTemplateConfig) {
+        //指定模板和角色
         completion.setPromptAndSystem(systemTemplateConfig,null);
         return completion.chatWithRoles(message);
     }
