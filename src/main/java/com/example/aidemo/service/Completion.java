@@ -1,11 +1,12 @@
 package com.example.aidemo.service;
 
 
-import com.example.aidemo.model.Template;
+import com.example.aidemo.model.PromptTemplateConfig;
+import com.example.aidemo.model.SystemTemplateConfig;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -15,14 +16,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 
 public class Completion {
+    @Autowired
     private OpenAiChatModel chatModel;
-
-    private Template template;
+    @Autowired
+    private PromptTemplateConfig promptTemplateConfig;
+    @Autowired
+    private SystemTemplateConfig systemTemplateConfig;
     //为ai指定一个角色
     SystemPromptTemplate systemPromptTemplate = null;
 
@@ -33,12 +36,11 @@ public class Completion {
     //这个类记录了所有的对话记录
 
     private List<Message> messages = new ArrayList<Message>();
-
     @Autowired
-    public Completion(Template template,OpenAiChatModel chatModel) {
+    public Completion(OpenAiChatModel chatModel, PromptTemplateConfig promptTemplateConfig, SystemTemplateConfig systemTemplateConfig) {
         this.chatModel = chatModel;
-        this.systemPromptTemplate = template.getSystemPromptTemplate();
-        this.promptTemplate = template.getPromptTemplate();
+        this.promptTemplateConfig = promptTemplateConfig;
+        this.systemTemplateConfig = systemTemplateConfig;
     }
 
     //通过这个方法向对话中增加一条用户消息
@@ -56,19 +58,19 @@ public class Completion {
     }
 
     //通过这个方法指定模板进行对话
-    public String chatWithPrompt(String message,String argument){
+    public String chatWithPrompt(String message){
         UserMessage userMessage = new UserMessage(message);
-        Message promptMessage = promptTemplate.createMessage(Map.of("name",argument));
+        Message promptMessage = promptTemplate.createMessage();
         Prompt prompt = new Prompt(List.of(promptMessage,userMessage));
         //记录返回的结果
         String result = chatModel.call(prompt.getContents().toString());
         return result;
     }
     //通过这个方法进行一次有角色的对话
-    public String chatWithRoles(String argument,String message){
+    public String chatWithRoles(String message){
         UserMessage userMessage = new UserMessage(message);
         //指定角色模板
-        Message systemMessage = systemPromptTemplate.createMessage(Map.of("language",argument));
+        Message systemMessage = systemPromptTemplate.createMessage();
         Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
         String result = chatModel.call(prompt.getContents().toString());
         return result;
@@ -85,7 +87,19 @@ public class Completion {
         update();
         return result;
     }
+    //通过这个方法为ai设置模板和角色
+    public void setPromptAndSystem(SystemTemplateConfig systemTemplateConfig,PromptTemplateConfig promptTemplateConfig){
+        //选择不设置模板
+        if(promptTemplateConfig == null){
+            systemPromptTemplate = new SystemPromptTemplate(systemTemplateConfig.getSystemText());
+            return;
+        }else {
+            //全都设置
+            systemPromptTemplate = new SystemPromptTemplate(systemTemplateConfig.getSystemText());
+            promptTemplate = new PromptTemplate(promptTemplateConfig.getPromptText());
+        }
 
+    }
     //更新对话长度
     private void update() {
         if(messages.size() > MAX_MESSAGE_SIZE){
