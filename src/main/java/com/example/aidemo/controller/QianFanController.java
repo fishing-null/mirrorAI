@@ -2,7 +2,7 @@ package com.example.aidemo.controller;
 
 import com.baidubce.qianfan.Qianfan;
 import com.baidubce.qianfan.model.image.Image2TextResponse;
-import com.example.aidemo.utils.PhotoFormatUtils;
+import com.example.aidemo.utils.formatUtils.PhotoFormatUtils;
 
 public class QianFanController {
     public static void main(String[] args) {

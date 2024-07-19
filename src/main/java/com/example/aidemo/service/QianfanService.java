@@ -4,12 +4,11 @@ import com.baidubce.qianfan.Qianfan;
 import com.baidubce.qianfan.model.chat.ChatResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/Ernie")
 @Component
-public class ErnieService {
+public class QianfanService {
     @Value("${app.accessKey}")
     private String ACCESS_KEY;
     @Value("${app.secretKey}")

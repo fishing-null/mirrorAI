@@ -1,4 +1,4 @@
-package com.example.aidemo.utils;
+package com.example.aidemo.utils.formatUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import java.util.Base64;
  * 格式化图片为Base64
  */
 public class PhotoFormatUtils {
+
+    //传入一张图片,将其转换为Base64编码格式
     public static String encodeImageToBase64Binary(String imagePath) {
         // 指定图片路径
         try {
@@ -27,8 +29,5 @@ public class PhotoFormatUtils {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(encodeImageToBase64Binary("E:\\photos\\R-C.jpg"));
-    }
 
 }

@@ -5,7 +5,6 @@ import com.example.aidemo.model.PromptTemplateConfig;
 import com.example.aidemo.model.SystemTemplateConfig;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @Service
 
-public class Completion {
+public class OpenAIService {
     @Autowired
     private OpenAiChatModel chatModel;
     @Autowired
@@ -37,21 +36,21 @@ public class Completion {
 
     private List<Message> messages = new ArrayList<Message>();
     @Autowired
-    public Completion(OpenAiChatModel chatModel, PromptTemplateConfig promptTemplateConfig, SystemTemplateConfig systemTemplateConfig) {
+    public OpenAIService(OpenAiChatModel chatModel, PromptTemplateConfig promptTemplateConfig, SystemTemplateConfig systemTemplateConfig) {
         this.chatModel = chatModel;
         this.promptTemplateConfig = promptTemplateConfig;
         this.systemTemplateConfig = systemTemplateConfig;
     }
 
     //通过这个方法向对话中增加一条用户消息
-    private Completion addUserMessage(String message){
+    private OpenAIService addUserMessage(String message){
         Message userMessage = new UserMessage(message);
         messages.add(userMessage);
         return this;
     }
 
     //通过这个方法向对话中添加一条ai信息
-    private Completion addAssistantMessage(String message){
+    private OpenAIService addAssistantMessage(String message){
         Message assistantMessage = new AssistantMessage(message);
         messages.add(assistantMessage);
         return this;

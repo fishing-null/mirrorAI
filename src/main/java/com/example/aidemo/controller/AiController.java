@@ -1,7 +1,7 @@
 package com.example.aidemo.controller;
 
 import com.example.aidemo.model.SystemTemplateConfig;
-import com.example.aidemo.service.Completion;
+import com.example.aidemo.service.OpenAIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class AiController {
     @Autowired
-    private Completion completion;
+    private OpenAIService openAIService;
 
     @GetMapping("/chat")
     public String chat(@RequestParam(value = "message", defaultValue = "Hi") String message) {
 
-        return completion.chat(message);
+        return openAIService.chat(message);
     }
 
     @GetMapping("/chatWithPrompt")
     public String chatWithPrompt(@RequestParam(value = "message", defaultValue = "Hi") String message) {
 
-        return completion.chatWithPrompt(message);
+        return openAIService.chatWithPrompt(message);
     }
 
     //通过前端上传SystemTemplateConfig来配置ai角色
@@ -28,7 +28,7 @@ public class AiController {
     public String chatWithRole(@RequestParam(value = "message", defaultValue = "Hi") String message,
                                @RequestBody SystemTemplateConfig systemTemplateConfig) {
         //指定模板和角色
-        completion.setPromptAndSystem(systemTemplateConfig,null);
-        return completion.chatWithRoles(message);
+        openAIService.setPromptAndSystem(systemTemplateConfig,null);
+        return openAIService.chatWithRoles(message);
     }
 }
