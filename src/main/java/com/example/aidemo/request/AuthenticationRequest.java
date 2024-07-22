@@ -4,7 +4,7 @@ package com.example.aidemo.request;
 import lombok.Data;
 
 @Data
-public class AuthenticationController {
+public class AuthenticationRequest{
     private String accessKey;
     private String secretKey;
 }
