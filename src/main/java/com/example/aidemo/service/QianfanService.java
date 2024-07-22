@@ -19,6 +19,7 @@ public class QianfanService {
     private String ACCESS_KEY;
     @Value("${app.qianfan.secretKey}")
     private String SECRET_KEY;
+    //配置人工智能模型
     @Value("${app.qianfan.model}")
     private String MODEL;
     @Value("${app.qianfan.url}")
@@ -45,22 +46,4 @@ public class QianfanService {
         return answers;
     }
 
-    public static void main(String[] args) {
-        Qianfan qianfan = new Qianfan("ALTAK59yqhccjmVKnZR02NOXE0","2cd5b37ce5904862b13792126dc048d2");
-        // 选择要调用的模型
-        List<String> answers = new ArrayList<>();
-        List<String> messages = new ArrayList<>();
-        messages.add("现在几点了");
-        messages.add("请你介绍一下西安");
-        messages.add("再讲讲怎么做当地的特色美食");
-        ChatResponse chatResponse = null;
-        for(String message:messages){
-            ChatBuilder model = qianfan.chatCompletion().model("ERNIE-Tiny-8K");
-            //遍历列表添加对话内容
-            chatResponse = model.addMessage("user", message).execute();
-            //将对话内容添加到响应中返回
-            answers.add(chatResponse.getResult());
-        }
-        System.out.println(answers);
-    }
 }

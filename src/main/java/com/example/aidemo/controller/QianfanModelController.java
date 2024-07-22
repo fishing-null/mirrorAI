@@ -21,6 +21,7 @@ import java.util.List;
 public class QianfanModelController {
     @Autowired
     private QianfanService qianfanService;
+    //通过这个接口,调用百度千帆的人工智能
     @RequestMapping(value = "/chat", produces = "application/json")
     public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request){
         log.info("调用百度千帆模型");
