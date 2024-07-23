@@ -1,6 +1,6 @@
 package com.example.aidemo.controller;
 
-import com.example.aidemo.model.SystemTemplateConfig;
+import com.example.aidemo.config.SystemTemplateConfig;
 import com.example.aidemo.service.OpenAIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

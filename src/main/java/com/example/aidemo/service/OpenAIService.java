@@ -1,8 +1,8 @@
 package com.example.aidemo.service;
 
 
-import com.example.aidemo.model.PromptTemplateConfig;
-import com.example.aidemo.model.SystemTemplateConfig;
+import com.example.aidemo.config.PromptTemplateConfig;
+import com.example.aidemo.config.SystemTemplateConfig;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;

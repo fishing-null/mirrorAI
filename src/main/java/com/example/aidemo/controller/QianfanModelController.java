@@ -1,18 +1,15 @@
 package com.example.aidemo.controller;
 
-import com.baidubce.qianfan.Qianfan;
-import com.baidubce.qianfan.model.image.Image2TextResponse;
-import com.example.aidemo.request.ChatRequest;
-import com.example.aidemo.response.ChatResponse;
+import com.example.aidemo.model.baidu.valobj.Message;
+import com.example.aidemo.request.BaiduCompletionRequest;
+import com.example.aidemo.response.BaiduCompletionResponse;
 import com.example.aidemo.service.QianfanService;
-import com.example.aidemo.utils.formatUtils.PhotoFormatUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -23,18 +20,18 @@ public class QianfanModelController {
     private QianfanService qianfanService;
     //通过这个接口,调用百度千帆的人工智能
     @RequestMapping(value = "/chat", produces = "application/json")
-    public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request){
+    public ResponseEntity<BaiduCompletionResponse> chat(@RequestBody BaiduCompletionRequest request){
         log.info("调用百度千帆模型");
         //读取请求
-        List<String> messageList = request.getMessages();
+        List<Message> messageList = request.getMessages();
         //构造响应
-        ChatResponse response = new ChatResponse();
+        BaiduCompletionResponse response = new BaiduCompletionResponse();
         //调用service层的方法
         try {
             List<String> answers = qianfanService.createConversation(request.getMessages());
             response.setAnswers(answers);
             if (answers == null || answers.isEmpty()) {
-                response.setErrorInfo("没有可用的回答请稍后再试");
+                response.setErrorInfo("没有可用的回答,请稍后再试");
             }else {
                 response.setErrorInfo("");
             }

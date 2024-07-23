@@ -48,7 +48,7 @@ public class AuthenticationController {
 
     //验证
     private boolean validateCredentials(String accessKey,String secretKey){
-        //TODO 现在没有验证的逻辑 不管什么情况都返回true
+        //TODO 现在没有验证的逻辑 不管什么情况都返回true 期望根据accessKey以及secretKey获取token验证
 
         return true;
     }

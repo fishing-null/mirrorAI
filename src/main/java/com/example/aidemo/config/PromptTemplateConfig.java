@@ -1,4 +1,4 @@
-package com.example.aidemo.model;
+package com.example.aidemo.config;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
