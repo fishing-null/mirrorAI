@@ -28,7 +28,7 @@ public class QianfanModelController {
         BaiduCompletionResponse response = new BaiduCompletionResponse();
         //调用service层的方法
         try {
-            List<String> answers = qianfanService.createConversation(request.getMessages());
+            List<String> answers = qianfanService.createConversation(request.getMessages(),request);
             response.setAnswers(answers);
             if (answers == null || answers.isEmpty()) {
                 response.setErrorInfo("没有可用的回答,请稍后再试");

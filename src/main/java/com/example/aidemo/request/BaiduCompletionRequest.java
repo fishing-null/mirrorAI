@@ -27,6 +27,7 @@ public class BaiduCompletionRequest implements Serializable {
      */
     private Boolean stream = false;
 
+
     /**
      * 默认0.95，范围 (0, 1.0]，不能为 0 , 较高的数值会使输出更加随机，而较低的数值会使其更加集中和确定
      */
