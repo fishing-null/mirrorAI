@@ -40,7 +40,6 @@ public class QianfanModelController {
             //服务器内部错误,返回500
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
         return ResponseEntity.ok(response);
     }
 

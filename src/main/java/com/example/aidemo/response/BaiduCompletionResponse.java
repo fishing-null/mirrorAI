@@ -79,11 +79,13 @@ public class BaiduCompletionResponse implements Serializable {
      */
     private Usage usage;
 
+    @JsonProperty("answers")
     /***
      * answer调用人工智能返回的回答
      */
     private List<String> answers;
 
+    @JsonProperty("error_info")
     /**
      * 调用接口不正确时,显示的错误信息
      */
