@@ -1,5 +1,6 @@
 package com.example.aidemo.controller;
 
+import com.baidubce.qianfan.model.chat.ChatResponse;
 import com.example.aidemo.model.baidu.valobj.Message;
 import com.example.aidemo.request.BaiduCompletionRequest;
 import com.example.aidemo.response.BaiduCompletionResponse;
@@ -28,11 +29,20 @@ public class QianfanModelController {
         BaiduCompletionResponse response = new BaiduCompletionResponse();
         //调用service层的方法
         try {
-            List<String> answers = qianfanService.createConversation(request.getMessages(),request);
-            response.setAnswers(answers);
-            if (answers == null || answers.isEmpty()) {
+            ChatResponse chatResponse = qianfanService.createConversation(request.getMessages(),request);
+            if (chatResponse == null ) {
                 response.setErrorInfo("没有可用的回答,请稍后再试");
             }else {
+                //TODO 这部分逻辑到时候要重构成新的方法
+                //封装chatResponse的内容到BaiduCompletionResponse
+                response.setId(chatResponse.getId());
+                response.setObject(chatResponse.getObject());
+                response.setCreated(chatResponse.getCreated());
+                response.setSentenceId(chatResponse.getSentenceId());
+                response.setResult(chatResponse.getResult());
+                response.setIsTruncated(chatResponse.getTruncated());
+                response.setNeedClearHistory(chatResponse.getNeedClearHistory());
+                response.setBanRound(chatResponse.getBanRound());
                 response.setErrorInfo("");
             }
         }catch (Exception e){
@@ -42,5 +52,6 @@ public class QianfanModelController {
         }
         return ResponseEntity.ok(response);
     }
+
 
 }

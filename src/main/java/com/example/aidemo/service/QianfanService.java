@@ -30,11 +30,10 @@ public class QianfanService {
     @Value("${app.qianfan.url}")
     private String API_URL;
 
-    public List<String> createConversation(List<Message> messages,BaiduCompletionRequest request) {
-        List<String> answers = new ArrayList<>();
+    public ChatResponse createConversation(List<Message> messages,BaiduCompletionRequest request) {
+        ChatResponse chatResponse = null;
         try {
             Qianfan qianfan = new Qianfan(ACCESS_KEY, SECRET_KEY);
-            ChatResponse chatResponse = null;
             for(Message message:messages){
                 ChatBuilder model = qianfan.chatCompletion().model(MODEL);
                 //调用setModelParameters方法调整模型参数
@@ -42,14 +41,13 @@ public class QianfanService {
                 //遍历列表添加对话内容
                 chatResponse = model.addMessage("user",message.getContent()).execute();
                 //将对话内容添加到响应中返回
-                answers.add(chatResponse.getResult());
             }
         }catch (Exception e){
             log.error("============调用"+MODEL+"失败============");
             e.printStackTrace();
 
         }
-        return answers;
+        return chatResponse;
     }
 
     /**
